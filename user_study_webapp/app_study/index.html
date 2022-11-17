@@ -1,0 +1,178 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css" />
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link rel="stylesheet" href="static/demo_open.css">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="" />
+  <title>Code Replayer</title>
+</head>
+
+<body>
+  <div class="main">
+    <div class="section">
+      <div class="section-content">
+        <div class="post-body" style="height: 100vh; padding-left: 1em; padding-right: 1em;">
+          <!-- main row for code and display-->
+
+          <div class="row" style="display: flex">
+            <div class="column" style="flex: 30%">
+
+              <!-- paragraph with scrolling -->
+              <div id="bodydesc" style="margin-left:auto; margin-right:auto; height: 60vh;  overflow-y: scroll; ">
+
+<!--                 <p id="events_pannel"
+                  style="float:left;color: #666666;  font-family: Candara,Trebuchet MS,sans-serif; font-size: 12px; font-weight: bold; border-right: thin dotted #666666; line-height: 18px;">
+
+                </p>
+ -->
+                <table id ="table_events" style="width: 25vw; 	font: normal 60% sans-serif;
+                "> 
+                  <tr>
+                    <th style="width:50%;">Time</th>
+                    <th style="width:20%;">Action</th>
+                    <th style="width:40%;">Label</th>
+                  </tr>  
+              </table>
+
+
+              </div>
+              <p id ="suggestion_label" > Current Suggestion </p>
+              <p id="state" style="border: solid black 1px">Waiting</p>
+              <div class="popup" id="popup"> Show/Hide Shortcuts/States
+                <span class="popuptext" id="myPopup">
+                  Shortcuts: <br />
+                   left/right arrows: navigate events <br>
+                   r: replay current state, make sure to stop replay before navigating <br>
+                   space: auto play Functionality, plays video untill end of event, waits for label, then resumes video <br>
+                   asdfgh zxcvbn: state labeling buttons <br>
+                   <br>
+                   States: <br>
+                   Thinking About Suggestion (a): actively thinking/verifying about suggestion shown, also includes going to the internet to verify <br>
+                   Not Thinking (s): not thinking about suggestion shown  <br>
+                   Deferring Thought For Later (d): decide to not think now about suggestion, but will think later about it  <br>
+                  Thinking About New Code To Write (f): thinking about code outside suggestions to write, new functionality  <br>
+                  Waiting For Suggestion (g): waiting for Copilot suggestion to be shown   <br>
+                  Writing New Code (z): writing code that implements new functionality <br>
+                  Editing Recent Suggestions (x): editing recent Copilot suggestions<br>
+                  Editing (Personally) Written Code(c): editing code you wrote that was not a Copilot suggestion for purpose of fixing functionality <br>
+                  Prompt Crafting (v): writing comment or code with intention of copilot completion<br>
+                  Writing Documentation (b): adding comments for purpose of documentation,<br>
+                  Debugging/Testing Code (h): running or debugging code to check functionality, may include writing tests or debugging statements<br>
+                  Looking up Documentation (n): going online to look up code or documentation
+                </span>
+              </div>
+
+            </div>
+
+            <div class="column" style="flex: 70%">
+              <div class="row" style="display: flex">
+
+                <div class="column" style="flex: 80%">
+                  <div id="myProgress">
+                    <div id="myBar"></div>
+                  </div>
+                </div>
+                <div class="column" style="flex: 30%">
+                  <p id="info" style=" color: red; margin-left: -10vw;"> </p>
+                </div>
+              </div>
+
+              <div class ="wrapper">
+              <video id="codeVideo" style="	margin-top: -1.5em; margin-bottom: -0.8em; "   controls>
+                <source src="" type="video/mp4" />
+              </video>
+              <div id="playpause_overlay" class="playpause"></div>
+            </div>
+              <br>
+              <button hidden class="button" style="border-radius: 50%;" id="pauseButton">Play</button>
+
+              <button class="button" style="border-radius: 50%;" id="autoPlay">AutoPlay</button>
+              <button hidden class="button" id="skip_5s_backward">Backward 5s </button>
+              <button hidden class="button" id="skip_5s_forward">Forward 5s</button>
+              Playback Speed
+              <input type="range" list="steplist" style="width: 10%;" min="0.25" step="0.5" max="3" value="1"
+                class="slider" id="speed_slider">
+              <datalist id="steplist">
+                <option>0.01</option>
+                <option>0.5</option>
+                <option>1</option>
+                <option>1.5</option>
+                <option>2</option>
+                <option>2.5</option>
+                <option>3</option>
+             </datalist>
+              &nbsp; &nbsp;
+              Navigate Events
+              <button class="button" id="prev_index">&#8249</button>
+              <button class="button" id="next_index">&#8250</button>
+              <button class="button" id="replay_event">Replay Event</button>
+            </div>
+            <!-- Buttons -->
+          </div>
+          <div style+="display: flex;
+          justify-content: center;">
+          <div style="margin-left: 10vw; margin-top: 0.5em;" > 
+            <label id="label_state" style=" color: rgb(184, 4, 4); font-size: 25px;"> What were you doing in this pause?</label>  &nbsp; &nbsp; &nbsp;
+            <input type="textarea" style="border: solid black 1px;" id="custom_state" placeholder="Type Custom State">
+            <button class="button" id="save_state">Submit Custom State</button> &nbsp;
+            <button class="btn-hover color-10"
+            id="stateIDK">IDK (I) </button> 
+          </div>
+          &nbsp; &nbsp; &nbsp;
+            <button 
+            class="btn-hover color-9"
+              id="state1">Thinking/Verifying Suggestion  (A)</button> &nbsp;
+            <button class="btn-hover color-9"
+              id="state2">Not Thinking  (S) </button> &nbsp;
+            <button class="btn-hover color-9"
+              id="state3"> Deferring Thought For Later   (D)</button> &nbsp;
+            <button class="btn-hover color-9"
+              id="state4">Thinking About New Code To Write  (F)</button> &nbsp;
+            <button style="margin-bottom: 0.5em;" class="btn-hover color-9"
+              id="state5">Waiting For Suggestion  (G) </button> &nbsp;
+              <button style="margin-bottom: 0.5em;" class="btn-hover color-10"
+              id="state11">Debugging/Testing Code (H) </button> &nbsp;   
+          <br>           
+          
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+            <button class="btn-hover color-8"
+              id="state6">Writing New Functionality  (Z)</button> &nbsp;
+            <button class="btn-hover color-8"
+              id="state7">Editing Last Suggestion (X)</button> &nbsp;
+            <button class="btn-hover color-8"
+              id="state8">Editing  Written Code(C)</button> &nbsp;
+            <button class="btn-hover color-8"
+              id="state9">Prompt Crafting (V)</button> &nbsp;
+              <button style="margin-bottom: 0.5em;" class="btn-hover color-8"
+              id="state12">Writing Documentation (B) </button> &nbsp;   
+              <button class="btn-hover color-10"
+              id="state10">Looking up Documentation (N)</button> &nbsp;           <br style="line-height: 1.5vw" />
+
+
+
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <script type="module" src="static/code_labels.js"></script>
+</body>
+
+</html>
