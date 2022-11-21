@@ -7,11 +7,12 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-18.04
 
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- sc
 - script: pip install --upgrade pip setuptools wheel
   displayName: 'Upgrade pip'
 - script: conda env create -f environment.yml
