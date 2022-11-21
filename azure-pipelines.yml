@@ -7,11 +7,13 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-18.04
+  vmImage: ubuntu-latest
 
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- script: apt install python3-distutils
+  displayName: 'Install dist utils'
 - script: conda env create -f environment.yml
   displayName: 'Replicate conda environement'
 - script: conda activate coderec
