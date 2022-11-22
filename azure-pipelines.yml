@@ -12,8 +12,8 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: conda init bash
-  displayName: 'initialize conda'
+- script: conda init bash && exec bash
+  displayName: 'initialize conda and restart the shell'
 - script: conda env create -f environment.yml
   displayName: 'Replicate conda environement'
 - script: conda activate coderec
