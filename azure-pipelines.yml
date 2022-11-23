@@ -19,5 +19,5 @@ steps:
 - script: |
     source activate coderec
     cd user_study_webapp/app_study/
-    timeout 10 s python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4 || [[ $? -eq 124 ]]
+    timeout 10s python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4 || [[ $? -eq 124 ]]
   displayName: 'Call success if the server runs for at least 10 secs'
