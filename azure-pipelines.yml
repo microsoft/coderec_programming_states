@@ -14,9 +14,10 @@ steps:
   displayName: 'Run a one-line script'
 - script: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: 'Add conda to PATH'
-- script: conda create --yes --quiet --name coderec
-  displayName: 'Install Anaconda packages'
+- script: conda env create --quiet --file environment.yml
+  displayName: 'Replicate conda environment'
 - script: |
     source activate coderec
-    conda install --yes --quiet --name coderec scipy
-  displayName: 'Install packages'
+    cd user_study_webapp/app_study/
+    python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
+  displayName: 'Run the webserver'
