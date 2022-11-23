@@ -12,9 +12,9 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: conda env create -f environment.yml
+- script: conda env create -n coderec
   displayName: 'Replicate conda environement'
-- script: source activate coderec
+- script: conda activate coderec
   displayName: 'Activate the new conda environment'
 - script: cd user_study_webapp/app_study && python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
   displayName: 'Run annotation tool server'
