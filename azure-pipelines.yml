@@ -15,7 +15,8 @@ steps:
 - script: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: 'Add conda to PATH'
 - script: conda create --yes --quiet --name coderec
-  displayName: 'Install Anaconda packages
+  displayName: 'Install Anaconda packages'
 - script: |
     source activate coderec
     conda install --yes --quiet --name coderec scipy
+  displayName: 'Install packages'
