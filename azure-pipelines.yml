@@ -12,11 +12,11 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- bash: echo "##vso[task.prependpath]$CONDA/bin"
+- script: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: 'Add conda to PATH'
 - script: conda create --yes --quiet --name coderec
   displayName: 'Install Anaconda packages
-- bash: |
+- script: |
     source activate coderec
     conda install --yes --quiet --name coderec scipy
   displayName: 'Replicate conda environement'
