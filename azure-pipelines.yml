@@ -20,9 +20,3 @@ steps:
     source activate coderec
     conda install --yes --quiet --name coderec scipy
   displayName: 'Replicate conda environement'
- 
-# - script: conda activate coderec
-#   displayName: 'Activate the new conda environment'
-# - script: cd user_study_webapp/app_study && python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
-#   displayName: 'Run annotation tool server'
-
