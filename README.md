@@ -38,7 +38,7 @@ To be more explicit, df_observations[i] is a pandas dataframe that contains the 
 'TimeSpentInState'
 'CurrentSuggestion' 
 'CurrentPrompt'
-'Measurements': measurements from the non-restricted logs raw
+'Measurements': measurements from logs
 'EditPercentage': an array containing the relative edit distance (in 0-1) for the 5 stillincode events for this completion
 'LabeledState': the state label by the user for the current state
 ```
