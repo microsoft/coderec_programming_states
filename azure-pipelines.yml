@@ -12,7 +12,7 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: conda env create -n coderec
+- script: conda create -n coderec
   displayName: 'Replicate conda environement'
 - script: conda activate coderec
   displayName: 'Activate the new conda environment'
