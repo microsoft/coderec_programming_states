@@ -19,5 +19,5 @@ steps:
 - script: |
     source activate coderec
     cd user_study_webapp/app_study/
-    python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
-  displayName: 'Run the webserver'
+    timeout 10s python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
+  displayName: 'Run the webserver for 10 sec'
