@@ -1,0 +1,18 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+- script: echo "##vso[task.prependpath]$CONDA/bin"
+  displayName: 'Add conda to PATH'
+- script: conda env create --quiet --file environment.yml
+  displayName: 'Replicate conda environment'
+- script: |
+    source activate coderec
+    cd user_study_webapp/app_study/
+    timeout 10s python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4 || [[ $? -eq 124 ]]
+  displayName: 'Call success if the server runs for at least 10 secs'
