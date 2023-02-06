@@ -2,7 +2,9 @@
 
 Arxiv link: https://arxiv.org/abs/2210.14306
 
-*Data will be released soon, be on the lookout*
+Dataframe of telemetry for the study is available in [data pickle](data/logs_by_user_session_labeled_new.pkl) 
+
+Video data of the coding session is available as a zipped folder at https://drive.google.com/file/d/1qriGQXjMDoesr1WxB7s0QK8rYy2hSddc/view?usp=sharing 
 
 # Installation
 
@@ -74,10 +76,11 @@ Steps:
 - For each study,  run the following commands:
 
 ```
-python server.py -p static/logs_user_extended_8.json -v static/video_cropped_8.mp4
+python server.py -p static/logs_user_8_l.json -v static/video_cropped_8.mp4
 ```
 - Go to http://localhost:8080/ on your browser to see the interface.
 
+Note that the jsons of the labeled states are not the final labels, please consult the [data pickle](data/logs_by_user_session_labeled_new.pkl)
 
 ![Annotation Interface](images/interface_sreenshot.png)
 
