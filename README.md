@@ -1,10 +1,14 @@
-# Code and Data for: Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming
+# Code and Data for: "Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming" AND "When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming"
 
-Arxiv link: https://arxiv.org/abs/2210.14306
+Note: code for the paper "When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming" will be updated soon.
 
-Dataframe of telemetry for the study is available in [data pickle](data/logs_by_user_session_labeled_new.pkl) 
+Arxiv link for Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming: https://arxiv.org/abs/2210.14306
 
-Video data of the coding session is available as a zipped folder at https://drive.google.com/file/d/1qriGQXjMDoesr1WxB7s0QK8rYy2hSddc/view?usp=sharing 
+Arxiv link for When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming: https://arxiv.org/pdf/2306.04930
+
+Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) 
+
+(Currently unavailable) Video data of the coding session is available as a zipped folder at https://drive.google.com/file/d/1qriGQXjMDoesr1WxB7s0QK8rYy2hSddc/view?usp=sharing 
 
 # Installation
 
@@ -27,9 +31,63 @@ We will also need to install further libraries and tools.
 ```
 
 
-# Dataframe for user study
+#  Reading Between the Lines
 
-Our study complete data is stored in '/data/logs_by_user_session_labeled.pkl' which contains python  array which we will name 'df_observations' where: 'df_observations[i]' is the session for the ith user stored as a pandas dataframe.
+
+## User Interface for Study Data
+
+You can interact with the study data using our annotation interface.
+
+Steps:
+
+- First make sure to download the data including the labels (.json files) and the videos (.mp4 files). 
+- Place both the json and mp4 in the 'user_study_webapp/app_study/static' folder.
+- For each study,  run the following commands:
+
+```
+python server.py -p static/logs_user_8_l.json -v static/video_cropped_8.mp4
+```
+- Go to http://localhost:8080/ on your browser to see the interface.
+
+Note that the jsons of the labeled states are not the final labels, please consult the [data pickle](data/data_labeled_study.pkl)
+
+![Annotation Interface](images/interface_sreenshot.png)
+
+
+
+We include the instructions for each coding task in [coding_tasks](user_study_webapp/coding_tasks.ipynb)
+
+
+## Drawing Timelines and Graphs
+
+
+Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the timelines for the study data.
+
+![User Timeline](images/user_timeline.PNG)
+
+
+
+Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the graph for the study data.
+
+
+![Graph](images/graph.JPG)
+
+
+##  Analysis
+
+For insights and analysis that are found in our paper, they can be replicated in the following  notebooks:
+
+- [information and statistics about participants and sessions found in Section 5 of the paper](user_study_analysis/section5.ipynb)
+- [results of the user study found in Section 6 of the paper](user_study_analysis/section6.ipynb)
+- [predictive models of CUPS found in Section 7 of the paper](predict_cups/predict_cups.ipynb)
+- [recreate appendix graphs for post-study survey](/user_study_analysis/participants_analysis.ipynb)
+
+
+
+
+## Dataframe for user study
+
+Our study complete data is stored in '/data/data_labeled_study.pkl' which contains python  array which we will name 'df_observations' where: 'df_observations[i]' is the session for the ith user stored as a pandas dataframe.
 
 To be more explicit, df_observations[i] is a pandas dataframe that contains the following columns:
 ```
@@ -61,139 +119,15 @@ Debugging/Testing Code (h): running or debugging code to check functionality, ma
 Looking at documentation: looking online for documentation
 ```
 
-The study dataframe is also stored as a csv file in '/data/logs_by_user_session_labeled.csv' which can be imported as a single pandas dataframe. 
 
 
 
-# User Interface for Study Data
-
-You can interact with the study data using our annotation interface.
-
-Steps:
-
-- First make sure to download the data including the labels (.json files) and the videos (.mp4 files). 
-- Place both the json and mp4 in the 'user_study_webapp/app_study/static' folder.
-- For each study,  run the following commands:
-
-```
-python server.py -p static/logs_user_8_l.json -v static/video_cropped_8.mp4
-```
-- Go to http://localhost:8080/ on your browser to see the interface.
-
-Note that the jsons of the labeled states are not the final labels, please consult the [data pickle](data/logs_by_user_session_labeled_new.pkl)
-
-![Annotation Interface](images/interface_sreenshot.png)
-
-
-
-We include the instructions for each coding task in [coding_tasks](user_study_webapp/coding_tasks.ipynb)
-
-
-# Visualization and Analysis for User Study
-
-## Drawing Timelines and Graphs
-
-
-Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the timelines for the study data.
-
-![User Timeline](images/user_timeline.PNG)
-
-
-
-Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the graph for the study data.
-
-
-![Graph](images/graph.PNG)
-
-
-##  Analysis
-
-For insights and analysis that are found in our paper, they can be replicated in the following two notebooks:
-
-- [high level statistics about actions, states and transitions](user_study_analysis/high_level_stats.ipynb.ipynb)
-- [time adjustments and deeper insights](user_study_analysis/deep_insights.ipynb.ipynb)
-
-
-# Generating Features from the  Dataframe for Prediction and Decoding
-
-
-Given the extended logs, we will generate features for the prediction and decoding models.
-
-The below command will generate a pickle file containing a python variable, name it 'df_features', of the following form:
-
-df_features[i][j][h]: is the h'th feature for the k'th event for the ith user.
-
-Let us elaborate further, df_features[i] is the all the data for the ith user. df_features[i][k] contains the features for the k'th event in the  session. Finally, df_features[i][k][h] contains the h'th feature, more precisely, df_features[i][k] is a list of different feature, where df_features[i][k][h]  is a list contains a representation of the h'th feature as follows:
-```
-   feature_dict = {'Measurements: compCharLen, confidence, documentLength, numLines, numTokens, promptCharLen, promptEndPos, quantile': 0,
-    'edit percentage': 1, 'time_in_state': 2, 'session_features':3, 'suggestion_label':4, 'prompt_label':5,
-    'suggestion_embedding':6, 'prompt_embedding':7, 'suggestion_text_features':8, 'prompt_text_features':9, 'statename':10}
-```
-meaning df_features[i][k][0] is a list contaning all measurement features, i.e. compCharLen, confidence, documentLength, numLines, numTokens, promptCharLen, promptEndPos, quantile in a row. And then df_features[i][k][6] is the 768 dimensional suggestion embedding and so forth.
-
-
-The command to get the features pickle file is:
-```
-python action_prediction/generate_features.py -p'OUTPUT_PATH_EXTENDED_LOGS.pkl' \
--c 0 \
--b 1000 \
--o 'OUTPUT_PATH_features.pkl' \
--e 1 \
--m 99999  \ 
-
-```
-
-the documentation for the args is:
-```
-('-p', '--path', help='Path to extended logs frame', required=True) 
-('-c', '--cudadevice', help='cuda device id', default=0, required=True, type=int)
-('-b', '--batchsize', help='batch size', default=1000, required=True, type=int)
-('-o', '--output', help='Output path of .pkl file', required=True) 
-('-e', '--embedding', help='Whether to get embeddings for suggestion and prompt', required=True, type=int)
-('-m', '--maxusers', help='max users', default=100, required=True, type=int)
-
-```
-
-# Predicting Accepts and Rejects
-
-
-The task of predicting Accepts and Rejects can be directly ran after generating the features.
-
-The script we will run trains an XGBoost model on the features and predicts the Accepts and Rejects and generate multiple plots and pickle files that save the results and model. The plots contain multiple analysis of the results.
-
-Note that we split data into train-val-split according to random_state=42, this can be changed in the action_prediction_prep.py script.
-
-```
-python action_prediction/action_prediction_xgb.py -p 'OUTPUT_PATH_features.pkl' \
--c 0 \
--s 1 \
--o 'OUTPUT_PATH_PLOTS_MODELS' \ 
--t 0.2 \ 
--v 0.1 \
-```
-
-The argument documentation is
-```
-('-p', '--path', help='Path to features array', required=True) # change to True
-('-c', '--usegpu', help='to use gpu (1 or 0)', default=0, required=True, type=int)
-('-s', '--splitbyusers', help='split by users or session (0 or 1)', default=0, required=True, type=int)
-('-o', '--output', help='output path folder to store results',  required=True)
-('-t', '--testpercentage', help='test percentage', default = 0.2, type =float)
-('-v', '--valpercentage', help='val percentage', default =0.1, type=float)
-```
-
-Note that there are other parameters we can change in the code to improve performance! You should expect to get almost 0.7 AUC and 70% accuracy on the test set. Note these numbers are not the same as those in Section 6 of the paper as those where obtained on a different dataset.
-
-
-
-
-![accuracy vs coverage curve](images/coverage_vs_acc.png)
 
 
 
 # Citation
 
-Please cite our paper if you use our dataset or code:
+Please cite our papers if you use our dataset or code:
 
 ```
 @article{mozannar2022reading,
@@ -203,7 +137,15 @@ Please cite our paper if you use our dataset or code:
   year={2022}
 }
 
+@article{mozannar2023show,
+  title={When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming},
+  author={Mozannar, Hussein and Bansal, Gagan and Fourney, Adam and Horvitz, Eric},
+  journal={arXiv preprint arXiv:2306.04930},
+  year={2023}
+}
 ```
+
+
 
 # Other
 
