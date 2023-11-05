@@ -6,7 +6,7 @@ Code and Data for:
 
 
 - [When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming]( https://arxiv.org/pdf/2306.04930)
-  [GO TO CODE](#When-to-Show-a-Suggestion?)
+  [GO TO CODE](#When-to-Show-a-Suggestion)
 
 
 Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) and processed in folder [data](data/)
@@ -131,7 +131,7 @@ Looking at documentation: looking online for documentation
 ```
 
 
-# When to Show a Suggestion? 
+# When to Show a Suggestion 
 
 All code is found [here](when_to_show/)
 
