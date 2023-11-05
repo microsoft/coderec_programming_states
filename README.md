@@ -1,14 +1,24 @@
-# Code and Data for: "Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming" AND "When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming"
+# Understanding and Improving Copilot 
 
-Note: code for the paper "When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming" will be updated soon.
+Code and Data for: 
+- [Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming](https://arxiv.org/abs/2210.14306)
+  [GO TO CODE](#Reading-Between-the-Lines)
 
-Arxiv link for Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming: https://arxiv.org/abs/2210.14306
 
-Arxiv link for When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming: https://arxiv.org/pdf/2306.04930
+- [When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming]( https://arxiv.org/pdf/2306.04930)
+  [GO TO CODE](#When-to-Show-a-Suggestion?)
 
-Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) 
+
+Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) and processed in folder [data](data/)
 
 (Currently unavailable) Video data of the coding session is available as a zipped folder at https://drive.google.com/file/d/1qriGQXjMDoesr1WxB7s0QK8rYy2hSddc/view?usp=sharing 
+
+# What is This?
+
+- **Understanding how programmers use Copilot**: our work enables an in depth study of how programmers use Copilot, and the different states programmers are in when using Copilot (CUPS). This repository contributes telemetry data of programmers completing tasks with Copilot and a detailed analysis of that data.
+
+- **When should a suggestion be shown in Copilot?** We contribute a simple method that predicts the probability of a programmer accepting a suggestion, and show that it can be used to improve the performance of Copilot by selectively showing suggestions.
+
 
 # Installation
 
@@ -33,6 +43,7 @@ We will also need to install further libraries and tools.
 
 #  Reading Between the Lines
 
+All code is found [here](between_the_lines/)
 
 ## User Interface for Study Data
 
@@ -55,19 +66,19 @@ Note that the jsons of the labeled states are not the final labels, please consu
 
 
 
-We include the instructions for each coding task in [coding_tasks](user_study_webapp/coding_tasks.ipynb)
+We include the instructions for each coding task in [coding_tasks](between_the_lines/user_study_webapp/coding_tasks.ipynb)
 
 
 ## Drawing Timelines and Graphs
 
 
-Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the timelines for the study data.
+Use the jupyter notebook [viz_draw](between_the_lines/user_study_analysis/viz_draw.ipynb) to draw the timelines for the study data.
 
 ![User Timeline](images/user_timeline.PNG)
 
 
 
-Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw the graph for the study data.
+Use the jupyter notebook [viz_draw](between_the_lines/user_study_analysis/viz_draw.ipynb) to draw the graph for the study data.
 
 
 ![Graph](images/graph.JPG)
@@ -77,10 +88,10 @@ Use the jupyter notebook [viz_draw](user_study_analysis/viz_draw.ipynb) to draw 
 
 For insights and analysis that are found in our paper, they can be replicated in the following  notebooks:
 
-- [information and statistics about participants and sessions found in Section 5 of the paper](user_study_analysis/section5.ipynb)
-- [results of the user study found in Section 6 of the paper](user_study_analysis/section6.ipynb)
-- [predictive models of CUPS found in Section 7 of the paper](predict_cups/predict_cups.ipynb)
-- [recreate appendix graphs for post-study survey](/user_study_analysis/participants_analysis.ipynb)
+- [information and statistics about participants and sessions found in Section 5 of the paper](between_the_lines/user_study_analysis/section5.ipynb)
+- [results of the user study found in Section 6 of the paper](between_the_lines/user_study_analysis/section6.ipynb)
+- [predictive models of CUPS found in Section 7 of the paper](between_the_lines/predict_cups/predict_cups.ipynb)
+- [recreate appendix graphs for post-study survey](between_the_lines//user_study_analysis/participants_analysis.ipynb)
 
 
 
@@ -120,10 +131,63 @@ Looking at documentation: looking online for documentation
 ```
 
 
+# When to Show a Suggestion? 
+
+All code is found [here](when_to_show/)
+
+![cdhf](images/cdhf.JPG)
 
 
+## Generating Features from the Dataframe for Prediction and Decoding
 
+We have already performed this step for you for the user study logs and processed data is in [data/featureframe_user_study.pkl](data/featureframe_user_study.pkl)
 
+Given the extended logs, we will generate features for the prediction and decoding models.
+
+The below command will generate a pickle file containing a python variable, name it 'df_features', of the following form:
+
+df_features[i][j][h]: is the h'th feature for the k'th event for the ith user.
+
+Let us elaborate further, df_features[i] is the all the data for the ith user. df_features[i][k] contains the features for the k'th event in the session. Finally, df_features[i][k][h] contains the h'th feature, more precisely, df_features[i][k] is a list of different feature, where df_features[i][k][h] is a list contains a representation of the h'th feature as follows:
+```
+   feature_dict = {'Measurements: compCharLen, confidence, documentLength, numLines, numTokens, promptCharLen, promptEndPos, quantile': 0,
+    'edit percentage': 1, 'time_in_state': 2, 'session_features':3, 'suggestion_label':4, 'prompt_label':5,
+    'suggestion_embedding':6, 'prompt_embedding':7, 'suggestion_text_features':8, 'prompt_text_features':9, 'statename':10}
+```
+meaning df_features[i][k][0] is a list contaning all measurement features, i.e. compCharLen, confidence, documentLength, numLines, numTokens, promptCharLen, promptEndPos, quantile in a row. And then df_features[i][k][6] is the 768 dimensional suggestion embedding and so forth.
+
+The command to get the features pickle file is:
+```
+python action_prediction/generate_features.py -p'OUTPUT_PATH_EXTENDED_LOGS.pkl' \
+-c 0 \
+-b 1000 \
+-o 'OUTPUT_PATH_features.pkl' \
+-e 1 \
+-m 99999  \ 
+```
+the documentation for the args is:
+```
+('-p', '--path', help='Path to extended logs frame', required=True) 
+('-c', '--cudadevice', help='cuda device id', default=0, required=True, type=int)
+('-b', '--batchsize', help='batch size', default=1000, required=True, type=int)
+('-o', '--output', help='Output path of .pkl file', required=True) 
+('-e', '--embedding', help='Whether to get embeddings for suggestion and prompt', required=True, type=int)
+('-m', '--maxusers', help='max users', default=100, required=True, type=int)
+```
+
+## Replicating Figures and Tables
+
+The figures and tables in the paper are generated using data from a larger dataset that is not provided for privacy reasons. However, one can perform all the analysis in the paper with the user study data that is collected in our 2022 paper. 
+
+- Effect of Programmer Latent State analysis (page 6) can be replicated with the notebook [effect_of_latent_state.ipynb](./when_to_show/effect_of_latent_state.ipynb)
+
+- The results (page 10) of predicting accepts with XGB can be replicated with [predict_accept_user_study.ipynb](./when_to_show/predict_accept_user_study.ipynb)
+
+- Figure 7 (CDHF) can be replicated by first generating the models m1 and m2 and then running the notebook [cdhf.ipynb](./when_to_show/cdhf.ipynb)
+
+- Figure 8 (which suggestion to show) and 10-11 can be replicated by first generating a model that only takes prompt and suggestion embeddings and running the notebook [max_reward_accept.ipynb](when_to_show/max_reward_accept.ipynb)
+
+Other figures (Figure 5, Figure 6) require the larger dataset and are not included in this release.
 
 # Citation
 
