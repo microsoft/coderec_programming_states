@@ -11,7 +11,7 @@ Code and Data for:
 
 Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) and processed in folder [data](data/)
 
-(Currently unavailable) Video data of the coding session is available as a zipped folder at https://drive.google.com/file/d/1qriGQXjMDoesr1WxB7s0QK8rYy2hSddc/view?usp=sharing 
+Video data of the coding session is available as a zipped folder at [link](https://drive.google.com/file/d/1BlGRiDu4Yp8kYoocLYbMA2Udowpl0d0R/view?usp=sharing) (note logs for all sessions can be constructed from the pickle file, but we make 4 in a convenient json format available in the zip file)
 
 # What is This?
 
@@ -56,11 +56,10 @@ Steps:
 - For each study,  run the following commands:
 
 ```
-python server.py -p static/logs_user_8_l.json -v static/video_cropped_8.mp4
+python server.py -p static/logs_user_8.json -v static/video_cropped_8.mp4
 ```
 - Go to http://localhost:8080/ on your browser to see the interface.
 
-Note that the jsons of the labeled states are not the final labels, please consult the [data pickle](data/data_labeled_study.pkl)
 
 ![Annotation Interface](images/interface_sreenshot.png)
 
