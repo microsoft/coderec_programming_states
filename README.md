@@ -2,16 +2,16 @@
 
 Code and Data for: 
 - [Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming](https://arxiv.org/abs/2210.14306)
-  [GO TO CODE](#Reading-Between-the-Lines)
+  [Go To Code](#Reading-Between-the-Lines) - CHI 2024
 
 
 - [When to Show a Suggestion? Integrating Human Feedback in AI-Assisted Programming]( https://arxiv.org/pdf/2306.04930)
-  [GO TO CODE](#When-to-Show-a-Suggestion)
+  [Go To Code](#When-to-Show-a-Suggestion) - AAAI 2024
 
 
 Dataframe of telemetry for the study is available in [data pickle](data/data_labeled_study.pkl) and processed in folder [data](data/)
 
-Video data of the coding session is available as a zipped folder at [link](https://drive.google.com/file/d/1BlGRiDu4Yp8kYoocLYbMA2Udowpl0d0R/view?usp=sharing) (note logs for all sessions can be constructed from the pickle file, but we make 4 in a convenient json format available in the zip file)
+Video data of the coding session is available as a zipped folder at [link](https://storage.googleapis.com/public-research-data-mozannar/copilot_study_data.zip) (note logs for all sessions can be constructed from the pickle file, but we make 4 in a convenient json format available in the zip file)
 
 # What is This?
 
